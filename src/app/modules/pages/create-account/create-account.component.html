@@ -1,0 +1,149 @@
+<section
+  class="min-h-screen bg-white flex items-center justify-center bg-gradient-to-br from-indigo-600 via-purple-600 to-fuchsia-600 p-6"
+>
+  <div
+    class="w-full max-w-md rounded-3xl bg-blue-900 backdrop-blur-sm shadow-xl
+           ring-1 ring-white/40"
+  >
+    <header class="px-8 pt-8 pb-6 text-center">      
+      <img src="assets/images/logo.png" alt="WN" class="mx-auto h-12 mb-4">
+      <h1 class="text-4xl font-bold text-white">Olá!</h1>
+      <p class="mt-1 text-xl text-white">
+        Para começar, preencha seus dados básicos:
+      </p>
+    </header>
+
+    <form 
+        [formGroup]="form"
+        (ngSubmit)="onSubmit()" 
+        class="px-8 pb-10 space-y-6">
+      
+        <div class="space-y-1 text-white">
+            <label for="email" class="block text-sm font-medium "
+              >Nome</label
+            >
+            <input
+              id="name"
+              formControlName="name"
+              type="name"
+              placeholder="Seu nome"
+              required
+              class="block w-full rounded-lg border border-gray-400 bg-white text-black
+                     px-3 py-2 text-sm shadow-sm placeholder-gray-400
+                     focus:border-indigo-600 focus:ring-2 focus:black
+                     disabled:opacity-50"
+            />
+    
+            <!-- * Validação -->
+            <p
+                *ngIf="name.errors?.['required'] && name.touched"
+                class="mt-1 text-xs text-red-500 font-bold">
+                O nome é obrigatório.
+            </p>
+    
+            <p *ngIf="name.errors?.['minlength'] && name.touched"
+                class="mt-1 text-xs text-red-500 font-bold">
+                Deve ter no mínimo 3 caracteres.
+            </p>
+    
+          </div>
+      
+        <div class="space-y-1 text-white">
+        <label for="email" class="block text-sm font-medium "
+          >E-mail</label
+        >
+        <input
+          id="email"
+          formControlName="currentEmail"
+          type="email"
+          placeholder="seu@email.com"
+          required
+          class="block w-full rounded-lg border border-gray-400 bg-white text-black
+                 px-3 py-2 text-sm shadow-sm placeholder-gray-400
+                 focus:border-indigo-600 focus:ring-2 focus:black
+                 disabled:opacity-50"
+        />
+
+        <!-- * Validação -->
+        <p
+            *ngIf="email.errors?.['required'] && email.touched"
+            class="mt-1 text-xs text-red-500 font-bold">
+            O e-mail é obrigatório.
+        </p>
+
+        <p *ngIf="email.errors?.['email'] && email.touched"
+            class="mt-1 text-xs text-red-500 font-bold">
+            Digite um endereço de e-mail válido.
+        </p>
+
+      </div>
+      
+      <div class="space-y-1 text-white">
+        <label for="password" class="block text-sm font-medium "
+          >Senha</label
+        >
+        <input
+          id="password"
+          formControlName="currentPassword"
+          type="password"
+          placeholder="••••••••"
+          required
+          class="block w-full rounded-lg border border-gray-400 bg-white text-black
+                 px-3 py-2 text-sm shadow-sm placeholder-gray-400
+                 focus:border-indigo-600 focus:ring-2 focus:black
+                 disabled:opacity-50"
+        />
+
+        <!-- * Validação -->
+        <p
+            *ngIf="password.errors?.['required'] && password.touched"
+            class="mt-1 text-xs text-red-500 font-bold">
+            Senha obrigatória.
+        </p>
+        
+        <p *ngIf="password.errors?.['minlength'] && password.touched"
+            class="mt-1 text-xs text-red-500 font-bold">
+            Deve ter no mínimo 8 caracteres.
+        </p>
+      </div>
+
+      <!-- * Mensagem de erro -->
+        <p *ngIf="error()" class="text-sm text-red-500 font-bold text-center">
+            {{ error() }}
+        </p>
+
+      <!-- Botão -->
+    <button
+        type="submit"
+        [disabled]="form.invalid || loading()"
+        class="bg-white inline-flex w-full items-center justify-center gap-2
+               rounded-lg px-4 py-2 text-sm font-semibold text-blue-900
+               shadow hover:bg-white/90 focus:outline-none focus:ring-2
+               focus:ring-gray-400 disabled:cursor-not-allowed
+               disabled:bg-gray-300"
+    >
+        Entrar
+        <svg
+            *ngIf="loading()"
+            class="h-4 w-4 animate-spin"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            >
+            <circle
+                class="opacity-25"
+                cx="12"
+                cy="12"
+                r="10"
+                stroke-width="4"
+            ></circle>
+            <path
+                class="opacity-75"
+                d="M4 12a8 8 0 018-8"
+                stroke-width="4"
+            ></path>
+            </svg>
+      </button>
+    </form>
+  </div>
+</section>

@@ -1,0 +1,31 @@
+
+<div class="flex items-center w-full cursor-pointer">
+    
+    <nav class="flex gap-2">
+        <a  
+            [routerLink]="'/'"
+            routerLinkActive="font-bold"
+            class="p-2 text-white hover:underline">
+            login
+        </a>
+        <a  
+            [routerLink]="'/'"
+            routerLinkActive="font-bold"
+            class="p-2 text-white hover:underline">
+            cadastrar
+        </a>    
+    </nav>
+    
+      <!-- dropdown à direita -->
+    <div class="relative" if>
+        <button (click)="toggle()"
+                class="px-3 py-2 rounded bg-gray-300 text-white">
+          Wendell
+        </button>
+    
+        <ul *ngIf="isDropdownOpen()" class="absolute right-0 mt-2 bg-white shadow rounded">
+          <li><button class="px-4 py-2 block w-full text-left"
+                      (click)="logout()">Sair</button></li>
+        </ul>
+    </div>
+</div>
