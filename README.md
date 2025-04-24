@@ -39,12 +39,12 @@ Angular 18.2 (standalone)
 ## Instalação e execução
 ```bash
 # clone
-$ git clone https://github.com/SEU_USUARIO/carro-app.git && cd carro-app
+$ git clone https://github.com/wendell-noce/car-location-frontend/
 
 # front
 $ cd apps/frontend
 $ pnpm i               # ou npm install
-$ pnpm dev             # standalone dev server
+$ ng serve            # standalone dev server
 
 # back
 $ cd ../../apps/backend
@@ -55,7 +55,7 @@ $ pnpm start:dev
 A aplicação web fica disponível em `http://localhost:4200`.
 
 ## Autenticação & Fluxo de Usuário
-1. **Login obrigatório**: ao acessar a rota `/cars`, o guard verifica o token JWT salvo em `localStorage`. Se ausente/expirado, o usuário é redirecionado para `/login`.
+1. **Login obrigatório**: ao acessar a rota `/`, o guard verifica o token JWT salvo em `sessionStorage`. Se ausente/expirado, o usuário é redirecionado para `/login`.
 2. **Criar conta**: na tela de login há um link "Criar nova conta" que dispara a mutação `POST /auth/signup` (NestJS) → Supabase Auth.
 3. **Sessão**: após login, o token é renovado a cada request via _interceptor_.
 
@@ -65,16 +65,8 @@ graph TD;
     A -->|/auth/login| B;
     B -->|JWT| C[Angular AuthService];
     C --> D[Guards & Interceptors];
-    D -->|/cars| E[CarsComponent];
+    D -->|/| E[CarsComponent];
 ```
-
-## Scripts úteis
-| Comando | Local | Descrição |
-|---------|-------|-----------|
-| `pnpm dev` | `apps/frontend` | Servidor dev Angular |
-| `pnpm build` | `apps/frontend` | Build de produção |
-| `pnpm start:dev` | `apps/backend` | NestJS em hot‑reload |
-| `pnpm test` | ambos | Jest + Vitest |
 
 ## Estrutura de pastas
 ```
@@ -85,12 +77,6 @@ apps/
         core/
         features/
         shared/
-  backend/            # NestJS monorepo
-    src/
-      auth/
-      cars/
-      users/
-``` 
 
 ## Contribuição
 Pull requests são bem‑vindos! Abra uma issue primeiro para discutir grandes mudanças.
