@@ -1,27 +1,99 @@
-# YlosTrading
+# Projeto: Carros App
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.11.
+Aplicação **Angular 18.2 (standalone)** para listagem e cadastro de carros.
 
-## Development server
+---
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+## Índice
+1. [Visão geral](#visão-geral)
+2. [Arquitetura](#arquitetura)
+3. [Pré‑requisitos](#pré-requisitos)
+4. [Instalação e execução](#instalação-e-execução)
+5. [Autenticação & Fluxo de Usuário](#autenticação--fluxo-de-usuário)
+6. [Scripts úteis](#scripts-úteis)
+7. [Estrutura de pastas](#estrutura-de-pastas)
+8. [Contribuição](#contribuição)
+9. [Licença](#licença)
 
-## Code scaffolding
+---
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Visão geral
+Este projeto demonstra um front‑end Angular standalone consumindo uma API REST em **Node.js + NestJS** com persistência no **Supabase**. O foco é a listagem de carros, mas todas as rotas são protegidas: _você precisa estar autenticado para visualizar qualquer carro_. Caso não possua conta, basta criar uma dentro do próprio app.
 
-## Build
+## Arquitetura
+```
+Angular 18.2 (standalone)
+ └─► REST API (NestJS 10, Node 20)
+      └─► Supabase Postgres (database + auth)
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+* **Angular**: lazy‑loaded routes e Signals.
+* **NestJS**: módulos Cars, Auth e Users.
+* **Supabase**: autenticação via JWT, Postgres + Storage.
 
-## Running unit tests
+## Pré‑requisitos
+- Node >= 20
+- npm >= 10 ou pnpm >= 9
+- Conta gratuita no Supabase (caso deseje rodar o back localmente)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Instalação e execução
+```bash
+# clone
+$ git clone https://github.com/SEU_USUARIO/carro-app.git && cd carro-app
 
-## Running end-to-end tests
+# front
+$ cd apps/frontend
+$ pnpm i               # ou npm install
+$ pnpm dev             # standalone dev server
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+# back
+$ cd ../../apps/backend
+$ pnpm i
+$ cp .env.example .env # configure SUPABASE_URL e SUPABASE_KEY
+$ pnpm start:dev
+```
+A aplicação web fica disponível em `http://localhost:4200`.
 
-## Further help
+## Autenticação & Fluxo de Usuário
+1. **Login obrigatório**: ao acessar a rota `/cars`, o guard verifica o token JWT salvo em `localStorage`. Se ausente/expirado, o usuário é redirecionado para `/login`.
+2. **Criar conta**: na tela de login há um link "Criar nova conta" que dispara a mutação `POST /auth/signup` (NestJS) → Supabase Auth.
+3. **Sessão**: após login, o token é renovado a cada request via _interceptor_.
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+```mermaid
+graph TD;
+    A[Tela de Login] -->|/auth/signup| B[Back NestJS];
+    A -->|/auth/login| B;
+    B -->|JWT| C[Angular AuthService];
+    C --> D[Guards & Interceptors];
+    D -->|/cars| E[CarsComponent];
+```
+
+## Scripts úteis
+| Comando | Local | Descrição |
+|---------|-------|-----------|
+| `pnpm dev` | `apps/frontend` | Servidor dev Angular |
+| `pnpm build` | `apps/frontend` | Build de produção |
+| `pnpm start:dev` | `apps/backend` | NestJS em hot‑reload |
+| `pnpm test` | ambos | Jest + Vitest |
+
+## Estrutura de pastas
+```
+apps/
+  frontend/           # Angular standalone
+    src/
+      app/
+        core/
+        features/
+        shared/
+  backend/            # NestJS monorepo
+    src/
+      auth/
+      cars/
+      users/
+``` 
+
+## Contribuição
+Pull requests são bem‑vindos! Abra uma issue primeiro para discutir grandes mudanças.
+
+## Licença
+[MIT](LICENSE)
